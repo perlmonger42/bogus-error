@@ -1,0 +1,28 @@
+PATH
+  remote: .
+  specs:
+    bogus-error (0.1.0)
+      activesupport-inflector
+      i18n
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    activesupport-inflector (0.1.0)
+    concurrent-ruby (1.0.5)
+    i18n (1.1.0)
+      concurrent-ruby (~> 1.0)
+    minitest (5.11.3)
+    rake (10.5.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  bogus-error!
+  bundler (~> 1.16)
+  minitest (~> 5.0)
+  rake (~> 10.0)
+
+BUNDLED WITH
+   1.16.3
