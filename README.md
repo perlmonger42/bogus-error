@@ -17,7 +17,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install https://github.com/perlmonger42/ruby-bogus-error.git
+    $ gem install https://github.com/perlmonger42/bogus-error.git
 
 ## Usage
 
@@ -56,7 +56,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/perlmonger42/ruby-bogus-error.
+Bug reports and pull requests are welcome on GitHub at https://github.com/perlmonger42/bogus-error.
 
 ## License
 

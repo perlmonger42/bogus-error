@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = %q{Raise errors as specified by a JSON file (for testing).}
   spec.description   = %q{Read}
-  spec.homepage      = "https://github.com/perlmonger42/ruby-bogus-error"
+  spec.homepage      = "https://github.com/perlmonger42/bogus-error"
   spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
