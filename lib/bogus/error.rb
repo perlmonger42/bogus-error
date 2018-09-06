@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 require 'bogus/error/version'
-require 'active_support/inflector'
 require 'json'
 
 module Bogus
@@ -8,6 +7,23 @@ module Bogus
     @Lock = Mutex.new
     @HandlerCount = 0
     FILENAME_REGEX = %r{^(/.*)/app/.*?([^/]*)_(handler|controller)\.rb$}
+
+    # Convert a string like 'ActiveRecord::StatementInvalid' into the
+    # corresponding constant ActiveRecord::StatementInvalid.
+    # (This code was copied from the `activesupport-inflector` gem.)
+    module_function
+    def constantize(camel_cased_word) #:nodoc:
+      names = camel_cased_word.split('::')
+      names.shift if names.empty? || names.first.empty?
+
+      constant = Object
+      names.each do |name|
+        constant = constant.const_defined?(name, false) ?
+          constant.const_get(name) :
+          constant.const_missing(name)
+      end
+      constant
+    end
 
     module_function
     def generate(logger, filename)
@@ -40,7 +56,7 @@ module Bogus
       end
       logger.debug(StandardError.new("   I've been instructed to raise #{error_class_name || 'nothing'}"))
       return unless error_class_name
-      error_class = error_class_name.classify.constantize
+      error_class = constantize(error_class_name)
       logger.debug(StandardError.new("   raising #{error_class} on request ##{n} -- BOGUS"))
       raise error_class, "   my BOGUS #{error_class} on request ##{n}"
     end
