@@ -40,7 +40,7 @@ module Bogus
         @HandlerCount += 1
         begin
           if (m = /(\w*)_(handler|controller)\.rb$/.match(filename))
-            logger.debug(StandardError.new("   looking for '#{name}' in #{json_file} (called from #{filename})"))
+            # logger.debug(StandardError.new("   looking for '#{name}' in #{json_file} (called from #{filename})"))
             data = {}
             File.open(json_file) { |file| data = JSON.parse file.read }
             if (error_class_name = data.delete(name))
@@ -54,7 +54,8 @@ module Bogus
         rescue Errno::ENOENT
         end
       end
-      logger.debug(StandardError.new("   I've been instructed to raise #{error_class_name || 'nothing'} from #{caller_locations.first.path}"))
+      # logger.debug(StandardError.new("   I've been instructed to raise #{error_class_name || 'nothing'} from #{caller_locations.first.path}"))
+      logger.debug(StandardError.new("   I've been instructed to raise #{error_class_name} from #{caller_locations.first.path}")) if error_class_name
       return unless error_class_name
       error_class = constantize(error_class_name)
       logger.debug(StandardError.new("   raising #{error_class} on request ##{n} -- BOGUS"))
