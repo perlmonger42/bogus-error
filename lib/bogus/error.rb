@@ -56,7 +56,7 @@ module Bogus
       end
       # logger.debug(StandardError.new("   I've been instructed to raise #{error_class_name || 'nothing'} from #{caller_locations.first.path}"))
       logger.debug(StandardError.new("   I've been instructed to raise #{error_class_name} from #{caller_locations.first.path}")) if error_class_name
-      return unless error_class_name
+      return unless error_class_name && error_class_name != 'NOTHING'
       error_class = constantize(error_class_name)
       logger.debug(StandardError.new("   raising #{error_class} on request ##{n} -- BOGUS"))
       raise error_class, "   my BOGUS #{error_class} on request ##{n}"
