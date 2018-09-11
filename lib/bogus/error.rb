@@ -54,7 +54,7 @@ module Bogus
         rescue Errno::ENOENT
         end
       end
-      logger.debug(StandardError.new("   I've been instructed to raise #{error_class_name || 'nothing'}"))
+      logger.debug(StandardError.new("   I've been instructed to raise #{error_class_name || 'nothing'} from #{caller_locations.first.path}"))
       return unless error_class_name
       error_class = constantize(error_class_name)
       logger.debug(StandardError.new("   raising #{error_class} on request ##{n} -- BOGUS"))
