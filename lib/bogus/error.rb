@@ -65,10 +65,21 @@ module Bogus
       logger.debug(StandardError.new("   #{log_msg} from #{file}"))
       error_class = constantize(error_class_name)
       logger.debug(StandardError.new("   raising #{error_class} on request ##{n} -- BOGUS"))
-      args = error_class == 'Medkit::Base' ?  args = ['default_error'] :
-             error_class == 'Medkit::Model' ? args = [Object.new] :
+      args = error_class_name == 'Medkit::Base' ?  args = ['default_error'] :
+             error_class_name == 'Medkit::Model' ? args = [Object.new, {}] :
              []
+      logger.debug(StandardError.new("   this is a special #{error_class_name} exception with args #{args.inspect}")) if args.size > 0
       raise error_class.new(*args)
     end
   end
 end
+###      logger.debug(StandardError.new("   I've been instructed to raise #{error_class_name || 'nothing'} from #{caller_locations.first.path}")) if error_class_name
+###      return unless error_class_name
+###      error_class = constantize(error_class_name)
+###      logger.debug(StandardError.new("   raising #{error_class} on request ##{n} -- BOGUS"))
+###      if error_class_name == 'Medkit::Base'
+###        logger.debug(StandardError.new("   this is a Medkit::Base exception"))
+###	raise Medkit::Base.new(:unknown_error)
+###      else
+###        raise error_class.new(:unknown_error)
+###      end
