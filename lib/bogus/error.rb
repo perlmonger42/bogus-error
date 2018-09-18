@@ -59,7 +59,7 @@ module Bogus
       return unless error_class_name && error_class_name != 'NOTHING'
       error_class = constantize(error_class_name)
       logger.debug(StandardError.new("   raising #{error_class} on request ##{n} -- BOGUS"))
-      raise error_class, "   my BOGUS #{error_class} on request ##{n}"
+      raise error_class
     end
   end
 end
