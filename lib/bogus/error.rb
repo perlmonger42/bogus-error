@@ -54,12 +54,21 @@ module Bogus
         rescue Errno::ENOENT
         end
       end
-      # logger.debug(StandardError.new("   I've been instructed to raise #{error_class_name || 'nothing'} from #{caller_locations.first.path}"))
-      logger.debug(StandardError.new("   I've been instructed to raise #{error_class_name} from #{caller_locations.first.path}")) if error_class_name
-      return unless error_class_name && error_class_name != 'NOTHING'
+
+      log_msg = "I have not been instructed to raise anything"
+      if error_class_name == 'NOTHING'
+        log_msg = "I've been explicitly instructed to raise NOTHING"
+      elsif error_class_name
+        log_msg = "I've been instructed to raise #{error_class_name}"
+      end
+      file = caller_locations.first.path
+      logger.debug(StandardError.new("   #{log_msg} from #{file}"))
       error_class = constantize(error_class_name)
       logger.debug(StandardError.new("   raising #{error_class} on request ##{n} -- BOGUS"))
-      raise error_class
+      args = error_class == 'Medkit::Base' ?  args = ['default_error'] :
+             error_class == 'Medkit::Model' ? args = [Object.new] :
+             []
+      raise error_class.new(*args)
     end
   end
 end
