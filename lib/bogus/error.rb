@@ -69,19 +69,22 @@ module Bogus
       end
 
       log_msg = "I have not been instructed to raise anything"
+      actual_error_class_name = nil
       if error_class_name == 'NOTHING'
         log_msg = "I've been explicitly instructed to raise NOTHING"
       elsif error_class_name
         log_msg = "I've been instructed to raise #{error_class_name}"
+        actual_error_class_name = error_class_name
       end
       file = caller_locations.first.path
       logger.debug(StandardError.new("   #{log_msg} from #{file}"))
-      error_class = constantize(error_class_name)
+      return unless actual_error_class_name
+      error_class = constantize(actual_error_class_name)
       logger.debug(StandardError.new("   raising #{error_class} on request ##{n} -- BOGUS"))
-      args = error_class_name == 'Medkit::Base' ?  args = ['default_error'] :
-        error_class_name == 'Medkit::Model' ? args = [DummyModel.new, {}] :
+      args = actual_error_class_name == 'Medkit::Base' ?  args = ['default_error'] :
+        actual_error_class_name == 'Medkit::Model' ? args = [DummyModel.new, {}] :
              []
-      logger.debug(StandardError.new("   this is a special #{error_class_name} exception with args #{args.inspect}")) if args.size > 0
+      logger.debug(StandardError.new("   this is a special #{actual_error_class_name} exception with args #{args.inspect}")) if args.size > 0
       raise error_class.new(*args)
     end
   end
