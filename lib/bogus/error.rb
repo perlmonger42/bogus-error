@@ -1,6 +1,19 @@
 # frozen_string_literal: true
-require 'bogus/error/version'
+#require 'bogus/error/version'
 require 'json'
+
+class DummyModel
+  include ActiveModel::Model
+  attr_accessor :display_name
+
+  def initialize
+    errors.add(:foo, 'bad fu')
+  end
+
+  def id
+    'ITbc75a6238fa74bc66790416d4a2a73da'
+  end
+end
 
 module Bogus
   module Error
@@ -66,7 +79,7 @@ module Bogus
       error_class = constantize(error_class_name)
       logger.debug(StandardError.new("   raising #{error_class} on request ##{n} -- BOGUS"))
       args = error_class_name == 'Medkit::Base' ?  args = ['default_error'] :
-             error_class_name == 'Medkit::Model' ? args = [Object.new, {}] :
+        error_class_name == 'Medkit::Model' ? args = [DummyModel.new, {}] :
              []
       logger.debug(StandardError.new("   this is a special #{error_class_name} exception with args #{args.inspect}")) if args.size > 0
       raise error_class.new(*args)
