@@ -53,7 +53,7 @@ module Bogus
         @HandlerCount += 1
         begin
           if (m = /(\w*)_(handler|controller)\.rb$/.match(filename))
-            # logger.debug(StandardError.new("   looking for '#{name}' in #{json_file} (called from #{filename})"))
+            logger.debug(StandardError.new("   looking for '#{name}' in #{json_file} (called from #{filename})"))
             data = {}
             File.open(json_file) { |file| data = JSON.parse file.read }
             if (error_class_name = data.delete(name))
