@@ -48,14 +48,15 @@ module Bogus
       # name should look like, e.g., 'foo'
       # kind should be either 'handler' or 'controller'
       json_file = "#{root}/config/#{kind}_bogus_errors.json"
+      json_data = '<uninitialized>'
       @Lock.synchronize do
         n = @HandlerCount
         @HandlerCount += 1
         begin
           if (m = /(\w*)_(handler|controller)\.rb$/.match(filename))
             logger.debug(StandardError.new("   looking for '#{name}' in #{json_file} (called from #{filename})"))
-            data = {}
-            File.open(json_file) { |file| data = JSON.parse file.read }
+            json_data = File.read(json_file)
+            data = JSON.parse json_data
             if (error_class_name = data.delete(name))
               File.open(json_file, 'w') do |file|
                 file.write(JSON.pretty_generate(data) + "\n")
@@ -68,6 +69,7 @@ module Bogus
         end
       end
 
+      logger.debug(StandardError.new("   read json #{json_data} from #{json_file}"))
       log_msg = "I have not been instructed to raise anything"
       actual_error_class_name = nil
       if error_class_name == 'NOTHING'
