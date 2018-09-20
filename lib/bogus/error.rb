@@ -55,17 +55,18 @@ module Bogus
         begin
           if (m = /(\w*)_(handler|controller)\.rb$/.match(filename))
             logger.debug(StandardError.new("   looking for '#{name}' in #{json_file} (called from #{filename})"))
-            json_data = File.read(json_file)
+            json_data = File.read(json_file).chomp
             data = JSON.parse json_data
             if (error_class_name = data.delete(name))
               File.open(json_file, 'w') do |file|
-                file.write(JSON.pretty_generate(data) + "\n")
+                file.write(JSON.generate(data))
               end
             end
           else
             logger.debug(StandardError.new("   ERROR: bogus_error cannot handle call from #{filename}"))
           end
-        rescue Errno::ENOENT
+        rescue Errno::ENOENT => err
+          logger.debug(err)
         end
       end
 
